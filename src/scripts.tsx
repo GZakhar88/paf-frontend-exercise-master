@@ -44,40 +44,56 @@ const App = () => {
   }, []);
 
 
-//------------------------------------COMPONENTS-----------------------------------//  
+//------------------------------------COMPONENTS-----------------------------------//
+  const Header: FC<data> = (props) => {
+    return (
+      <div className="list-header">
+        <h1>{props.title}</h1>
+        <hr />
+        <p>{props.description}</p>
+      </div>
+    );
+  };
+
   const SingleItem: FC<item> = (props) => {
     return (
       <div className="single-item">
-        <img src={props.image} />
+        <img className="game-logo" src={props.image} />
         <p>{props.title}</p>
       </div>
     );
   };
 
-  const ListItem: FC<list> = (props) => {
+  const CategoryItem: FC<list> = (props) => {
     return (
-      <div className="list-item">
-        <h2>{props.title}</h2>
+      <div className="category-container">
+        <div className="category-title">
+          <h2>{props.title}</h2>
+        </div>
+        <div className="games-container">
         {props.items.map(element => {
           return <SingleItem  key={element.id} {...element} />
         })}
+        </div>
       </div>
     )
   };
 
   return (
     <div className="app">
+      { data !== undefined && <Header {...data}/>}
       { data !== undefined && data.lists.map(element => {
-        return <ListItem  key={element.id} {...element}/>
+        return <CategoryItem  key={element.id} {...element}/>
       })}
     </div>
   )
   
 }
   
-  
-const rootElement = document.getElementById("root");
-render(<App />, rootElement);
+
+const listElement = document.getElementById("list");
+render(<App />, listElement);
+
 
 
 
