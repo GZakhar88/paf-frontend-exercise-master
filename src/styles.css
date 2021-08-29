@@ -60,7 +60,6 @@ p {
   width: 40vw;
   height: fit-content;
 }
-
 .category-title {
   display: flex;
   flex-direction: row;
@@ -68,6 +67,11 @@ p {
   width: fit-content;
   font-size: 2rem;
   font-weight: bold;
+}
+.search-and-filter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 #search-text {
   outline: none;

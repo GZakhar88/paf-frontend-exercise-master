@@ -11,7 +11,7 @@ const Components = () => {
   type data = {
     title: string;
     description: string;
-    lists: Array<list>
+    lists: Array<list>;
   };
   type game = {
     id: number;
@@ -29,7 +29,9 @@ const Components = () => {
   const [data, setData] = useState<data>();
   const [searchTerm, setSearchTerm] = useState("");
   const [foundedItem, setFoundedItem] = useState<game[]>([]);
-  const [recentSearch, setRecentSearch] = useState<string[]>([])
+  const [recentSearch, setRecentSearch] = useState<string[]>([]);
+  const [providers, setProviders] = useState<string[]>([]);
+  const [categoryTitles, setCategoryTitles] = useState<string[]>([]);
 
   
   useEffect(() => {
@@ -41,25 +43,28 @@ const Components = () => {
   }, []);
   
   useEffect(() => {
-    searchTerm.length !== 0 && searchInData(searchTerm)
+    searchTerm.length !== 0 && searchInData(searchTerm);
   }, [searchTerm])
 
   useEffect(() => {
-    localStorage.setItem('recent', JSON.stringify(recentSearch))
-  })
+    localStorage.setItem('recent', JSON.stringify(recentSearch));
+  });
   
   //------------------------------------FUNCTIONS-----------------------------------//
   async function fetchData(inputUrl: string) {
     try {
       const requestData = await fetch(inputUrl);
       const response: data = await requestData.json();
+      const providers = getProviders(response);
+      const categories = getCategoryTitles(response);
       setData(response)
+      setProviders(providers);
+      setCategoryTitles(categories);
     } catch (error) {
       console.log(error)
     }
   };
   
-
   const searchInData = (input: string) => {
     const searchedItem: game[] = [];
     data?.lists.map(list => {
@@ -70,6 +75,26 @@ const Components = () => {
     searchedItem.length === 0 && alert('Sorry but not found any game with this name');
     const filtered = [...new Map(searchedItem.map(item => [JSON.stringify(item), item])).values()];
     setFoundedItem(filtered)
+  };
+
+  const getProviders = (data: data) => {
+    const providersArray: string[] = [];
+    let filtered: string[] = [];
+    if (data) {
+      data.lists.map(list => list.items.map(game => { providersArray.push(game.provider) }));
+      filtered = [...new Map(providersArray.map(item => [JSON.stringify(item), item])).values()];
+    }
+    return filtered
+  };
+
+  const getCategoryTitles = (data: data) => {
+    const categoriesArray: string[] = [];
+    let filtered: string[] = [];
+    if (data) {
+      data.lists.map(list => categoriesArray.push(list.title));
+      filtered = [...new Map(categoriesArray.map(item => [JSON.stringify(item), item])).values()];
+    }
+    return filtered
   };
 
   
@@ -137,15 +162,25 @@ const Components = () => {
       ) 
   };
   
-  const FilterComponent: FC = () => {
+  const DropDown: FC = () => {
 
-
-      return (
-        <div>
-
+    return (
+      <div className="drop-down">
+        <span>Filter By...</span>
+        <div className="custom-select">
+          <select className="order">
+            <option key="all" value="all" className="option">Show all</option>
+            <hr />
+            {providers.map(provider => { return (<option key={provider} className="option" value={provider}>{provider}</option>) })}
+            <hr />
+            {categoryTitles.map(category => <option key={category} className="option" value={category}>{category}</option>)}
+          </select>
         </div>
-      )
-    }
+      </div>
+    )
+  };
+
+
 
 
   // MAIN RETURN
@@ -154,7 +189,7 @@ const Components = () => {
       {data !== undefined && <HeaderComponent {...data} />}
       <div className="search-and-filter">
         <SearchComponent />
-        <FilterComponent />
+        <DropDown />
       </div>
       <div className="list">
       { foundedItem.length !== 0
