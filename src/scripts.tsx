@@ -73,12 +73,8 @@ const Components = () => {
   };
 
   
-
-  
-
-
   //------------------------------------REACT COMPONENTS-----------------------------------//
-  const Header: FC<data> = (props) => {
+  const HeaderComponent: FC<data> = (props) => {
     return (
       <div className="list-header">
         <h1>{props.title}</h1>
@@ -88,7 +84,7 @@ const Components = () => {
     );
   };
 
-  const SingleItem: FC<game> = (props) => {
+  const SingleItemComponent: FC<game> = (props) => {
     return (
       <div className="single-item">
           <img className="game-logo" src={props.image} />
@@ -97,7 +93,7 @@ const Components = () => {
     );
   };
 
-  const CategoryItem: FC<list> = (props) => {
+  const CategoryItemComponent: FC<list> = (props) => {
     return (
       <div className="category-container">
         <div className="category-title">
@@ -105,23 +101,21 @@ const Components = () => {
         </div>
         <div className="games-container">
           {props.items.map(element => {
-            return <SingleItem key={element.id} {...element} />
+            return <SingleItemComponent key={element.id} {...element} />
           })}
         </div>
       </div>
     )
   };
 
-  //####################### SEARCH AND FILTER #######################
-  const Nav: FC = () => {
-
-    const Search: FC = () => {
-      const searchFunction = (event: FormEvent<HTMLFormElement>) => {
+  const SearchComponent: FC = () => {
+      const searchComponentFunction = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement
         const input = form.querySelector('#search-text') as HTMLInputElement
         setSearchTerm(input.value);
 
+        // Save into the "history"
         if (recentSearch.length === 10) {
           const tempArray = recentSearch.pop()
           setRecentSearch(recentSearch);
@@ -131,22 +125,21 @@ const Components = () => {
 
        return (
         <div id="search">
-          <form className="search-form" onSubmit={event => searchFunction(event)}>
-             <input id="search-text" name="search-text" type="text" placeholder="Search..." autoComplete="off" list="recent-search" />
+           <form className="search-form" onSubmit={event => searchComponentFunction(event)}>
+             <input id="search-text" name="search-text" type="text" placeholder="Search by game name" autoComplete="off" list="recent-search" />
              <datalist id="recent-search">
                {recentSearch.map((item) =>
                  <option key={recentSearch.indexOf(item)} value={item} />
                )}
              </datalist>
-             <button>Search</button>
           </form>
         </div>
       ) 
-    };
+  };
+  
+  const FilterComponent: FC = () => {
 
 
-
-    const Filter: FC = () => {
       return (
         <div>
 
@@ -155,27 +148,21 @@ const Components = () => {
     }
 
 
-    return (
-      <nav className="nav-bar-components">
-        <Search />
-        {/* <Filter /> */}
-      </nav>
-    )
-  };
-
-
   // MAIN RETURN
   return (
     <div>
-      {data !== undefined && <Header {...data} />}
-      <Nav />
+      {data !== undefined && <HeaderComponent {...data} />}
+      <div className="search-and-filter">
+        <SearchComponent />
+        <FilterComponent />
+      </div>
       <div className="list">
       { foundedItem.length !== 0
         ? foundedItem.map(game => {
-          return <SingleItem key={game.id} {...game} />
+          return <SingleItemComponent key={game.id} {...game} />
           })
         : data !== undefined && data.lists.map(element => {
-            return <CategoryItem key={element.id} {...element} />
+            return <CategoryItemComponent key={element.id} {...element} />
           })}
         </div>  
     </div>

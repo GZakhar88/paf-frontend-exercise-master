@@ -14,10 +14,6 @@ nav {
   justify-content: space-between;
   background-color: purple;
 }
-input {
-  width: 20vw;
-  height: 5vw;
-}
 h1 {
   font-weight: normal;
   font-size: 5rem;
@@ -72,4 +68,16 @@ p {
   width: fit-content;
   font-size: 2rem;
   font-weight: bold;
+}
+#search-text {
+  outline: none;
+  width: 30vw;
+  height: 5vw;
+  border: 2px solid #ccc;
+  border-radius: 2.5vw;
+  background-color: white;
+  padding-left: 1rem;
+}
+::placeholder {
+  opacity: 60%;
 }
