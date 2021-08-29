@@ -64,7 +64,7 @@ const Components = () => {
     const searchedItem: game[] = [];
     data?.lists.map(list => {
       list.items.map(item => {
-        item.title == input && searchedItem.push(item);
+        item.title.toLowerCase().match(input) && searchedItem.push(item);
       })
     });
     searchedItem.length === 0 && alert('Sorry but not found any game with this name');
@@ -129,8 +129,6 @@ const Components = () => {
         setRecentSearch([input.value, ...recentSearch]);
       };
 
-      
-     
        return (
         <div id="search">
           <form className="search-form" onSubmit={event => searchFunction(event)}>
@@ -145,6 +143,8 @@ const Components = () => {
         </div>
       ) 
     };
+
+
 
     const Filter: FC = () => {
       return (
@@ -167,8 +167,8 @@ const Components = () => {
   // MAIN RETURN
   return (
     <div>
-      <Nav />
       {data !== undefined && <Header {...data} />}
+      <Nav />
       <div className="list">
       { foundedItem.length !== 0
         ? foundedItem.map(game => {
