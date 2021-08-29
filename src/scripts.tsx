@@ -123,22 +123,27 @@ const Components = () => {
         setSearchTerm(input.value);
 
         if (recentSearch.length === 10) {
-          const tempArray = recentSearch
-          tempArray.shift()
-          setRecentSearch(tempArray);
+          const tempArray = recentSearch.pop()
+          setRecentSearch(recentSearch);
         }
-        setRecentSearch([...recentSearch, input.value]);
+        setRecentSearch([input.value, ...recentSearch]);
       };
 
+      
      
-      return (
+       return (
         <div id="search">
           <form className="search-form" onSubmit={event => searchFunction(event)}>
-            <input id="search-text" type="text" placeholder="Search..." autoComplete="off"/>
-            <button>Search</button>
+             <input id="search-text" name="search-text" type="text" placeholder="Search..." autoComplete="off" list="recent-search" />
+             <datalist id="recent-search">
+               {recentSearch.map((item) =>
+                 <option key={recentSearch.indexOf(item)} value={item} />
+               )}
+             </datalist>
+             <button>Search</button>
           </form>
         </div>
-      )
+      ) 
     };
 
     const Filter: FC = () => {
