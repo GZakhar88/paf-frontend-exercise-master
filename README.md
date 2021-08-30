@@ -7,12 +7,12 @@ Do not add any other frameworks or libraries.
 
 ## Requirements
 
-[X] 1. Use modern HTML to produce a semantic information structure.
-[X] 2. Use modern CSS to produce the layout with a mobile first approach  
+ 1. Use modern HTML to produce a semantic information structure. [X]
+ 2. Use modern CSS to produce the layout with a mobile first approach  [X]
  _Should support screen resolutions from small screens (320px+) up to big screens (1920px+)_
-[X] 3. Fetch JSON-data from the following url: `/api/games/lists.json`
-[X] 4. Use React to generate the elements/components based on the fetched JSON-data.
-[X] 5. Create a search/filter component based upon the JSON-data.
+ 3. Fetch JSON-data from the following url: `/api/games/lists.json` [X]
+ 4. Use React to generate the elements/components based on the fetched JSON-data. [X]
+ 5. Create a search/filter component based upon the JSON-data. [X]
 
 - Implement your own design for the search/filter component[X]
 - Should be a component[X]
