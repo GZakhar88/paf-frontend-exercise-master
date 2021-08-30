@@ -41,7 +41,7 @@ const Components = () => {
   
   useEffect(() => {
     searchTerm.length !== 0 && searchInData(searchTerm);
-  }, [searchTerm])
+  }, [searchTerm]);
 
   useEffect(() => {
     localStorage.setItem('recent', JSON.stringify(recentSearch));
@@ -105,7 +105,7 @@ const Components = () => {
           })}
         </div>
       </div>
-    )
+    );
   };
 
   const SearchComponent: FC = () => {
@@ -123,22 +123,22 @@ const Components = () => {
         setRecentSearch([input.value, ...recentSearch]);
       };
 
-       return (
-        <div id="search">
-           <form className="search-form" onSubmit={event => searchComponentFunction(event)}>
-             <input id="search-text-input" name="search-text-input" type="text" placeholder="Search by game name" autoComplete="off" list="recent-search" />
-             <datalist id="recent-search">
-               {recentSearch.map((item, index: number) =>
-                 <option key={index} value={item} />
-               )}
-             </datalist>
-          </form>
-        </div>
-      ) 
+    return (
+      <div id="search">
+        <form className="search-form" onSubmit={event => searchComponentFunction(event)}>
+          <input id="search-text-input" name="search-text-input" type="text" placeholder="Search by game name" autoComplete="off" list="recent-search" />
+          <datalist id="recent-search">
+            {recentSearch.map((item, index: number) =>
+              <option key={index} value={item} />
+            )}
+          </datalist>
+        </form>
+      </div>
+    );
   };
   
 
-  // MAIN RETURN
+// MAIN RETURN
   return (
     <div>
       {data !== undefined && <HeaderComponent {...data} />}
