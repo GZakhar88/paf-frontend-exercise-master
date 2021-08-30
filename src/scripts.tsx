@@ -28,12 +28,9 @@ const Components = () => {
   //------------------------------------STATES-----------------------------------//
   const [data, setData] = useState<data>();
   const [searchTerm, setSearchTerm] = useState("");
-  const [foundedItem, setFoundedItem] = useState<game[]>([]);
-  const [recentSearch, setRecentSearch] = useState<string[]>([]);
-  const [providers, setProviders] = useState<string[]>([]);
-  const [categoryTitles, setCategoryTitles] = useState<string[]>([]);
-
-  
+  const [searchedItem, setSearchedItem] = useState<game[]>([]);
+  const [recentSearch, setRecentSearch] = useState<string[]>([]); 
+ 
   useEffect(() => {
     fetchData(URL);
     const localStorageData = localStorage.getItem("recent");
@@ -55,11 +52,7 @@ const Components = () => {
     try {
       const requestData = await fetch(inputUrl);
       const response: data = await requestData.json();
-      const providers = getProviders(response);
-      const categories = getCategoryTitles(response);
       setData(response)
-      setProviders(providers);
-      setCategoryTitles(categories);
     } catch (error) {
       console.log(error)
     }
@@ -69,32 +62,14 @@ const Components = () => {
     const searchedItem: game[] = [];
     data?.lists.map(list => {
       list.items.map(item => {
-        item.title.toLowerCase().match(input) && searchedItem.push(item);
+        item.title.toLowerCase().match(input.toLowerCase()) && searchedItem.push(item);
       })
     });
     searchedItem.length === 0 && alert('Sorry but not found any game with this name');
+
+    // Filter the search result for uniqe values
     const filtered = [...new Map(searchedItem.map(item => [JSON.stringify(item), item])).values()];
-    setFoundedItem(filtered)
-  };
-
-  const getProviders = (data: data) => {
-    const providersArray: string[] = [];
-    let filtered: string[] = [];
-    if (data) {
-      data.lists.map(list => list.items.map(game => { providersArray.push(game.provider) }));
-      filtered = [...new Map(providersArray.map(item => [JSON.stringify(item), item])).values()];
-    }
-    return filtered
-  };
-
-  const getCategoryTitles = (data: data) => {
-    const categoriesArray: string[] = [];
-    let filtered: string[] = [];
-    if (data) {
-      data.lists.map(list => categoriesArray.push(list.title));
-      filtered = [...new Map(categoriesArray.map(item => [JSON.stringify(item), item])).values()];
-    }
-    return filtered
+    setSearchedItem(filtered)
   };
 
   
@@ -112,7 +87,7 @@ const Components = () => {
   const SingleItemComponent: FC<game> = (props) => {
     return (
       <div className="single-item">
-          <img className="game-logo" src={props.image} />
+        <img className="game-logo" src={props.image} />
         <p>{props.title}</p>
       </div>
     );
@@ -137,7 +112,7 @@ const Components = () => {
       const searchComponentFunction = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement
-        const input = form.querySelector('#search-text') as HTMLInputElement
+        const input = form.querySelector('#search-text-input') as HTMLInputElement
         setSearchTerm(input.value);
 
         // Save into the "history"
@@ -151,10 +126,10 @@ const Components = () => {
        return (
         <div id="search">
            <form className="search-form" onSubmit={event => searchComponentFunction(event)}>
-             <input id="search-text" name="search-text" type="text" placeholder="Search by game name" autoComplete="off" list="recent-search" />
+             <input id="search-text-input" name="search-text-input" type="text" placeholder="Search by game name" autoComplete="off" list="recent-search" />
              <datalist id="recent-search">
-               {recentSearch.map((item) =>
-                 <option key={recentSearch.indexOf(item)} value={item} />
+               {recentSearch.map((item, index: number) =>
+                 <option key={index} value={item} />
                )}
              </datalist>
           </form>
@@ -162,26 +137,6 @@ const Components = () => {
       ) 
   };
   
-  const DropDown: FC = () => {
-
-    return (
-      <div className="drop-down">
-        <span>Filter By...</span>
-        <div className="custom-select">
-          <select className="order">
-            <option key="all" value="all" className="option">Show all</option>
-            <hr />
-            {providers.map(provider => { return (<option key={provider} className="option" value={provider}>{provider}</option>) })}
-            <hr />
-            {categoryTitles.map(category => <option key={category} className="option" value={category}>{category}</option>)}
-          </select>
-        </div>
-      </div>
-    )
-  };
-
-
-
 
   // MAIN RETURN
   return (
@@ -189,11 +144,13 @@ const Components = () => {
       {data !== undefined && <HeaderComponent {...data} />}
       <div className="search-and-filter">
         <SearchComponent />
-        <DropDown />
+        <button onClick={(event: React.MouseEvent<HTMLElement>) => {
+          setSearchedItem([])
+        }}>Show all</button>
       </div>
       <div className="list">
-      { foundedItem.length !== 0
-        ? foundedItem.map(game => {
+      { searchedItem.length !== 0
+        ? searchedItem.map(game => {
           return <SingleItemComponent key={game.id} {...game} />
           })
         : data !== undefined && data.lists.map(element => {
