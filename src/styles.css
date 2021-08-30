@@ -52,9 +52,22 @@ h1 {
   padding: 0;
   margin: 0;
 }
+.logo-container {
+  position: relative;
+}
 .game-logo {
   width: 35vw;
   height: fit-content;
+}
+.game-logo-bg {
+  width: 35vw;
+  height: 35vw;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.38);
 }
 .category-title {
   display: flex;
@@ -117,11 +130,16 @@ h1 {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    padding: 1rem;
     gap: 2rem;
   }
   .game-logo {
     width: 140px;
     height: fit-content;
+  }
+  .game-logo-bg {
+    width: 140px;
+    height: 140px;
   }
   .single-item p {
     font-size: 1rem;

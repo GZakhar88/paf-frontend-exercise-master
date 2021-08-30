@@ -65,7 +65,7 @@ const Components = () => {
         item.title.toLowerCase().match(input.toLowerCase()) && searchedItem.push(item);
       })
     });
-    searchedItem.length === 0 && alert('Sorry but not found any game with this name');
+    searchedItem.length === 0 && alert("Sorry but not found any game with this name");
 
     // Filter the search result for uniqe values
     const filtered = [...new Map(searchedItem.map(item => [JSON.stringify(item), item])).values()];
@@ -87,7 +87,10 @@ const Components = () => {
   const SingleItemComponent: FC<game> = (props) => {
     return (
       <div className="single-item">
+        <div className="logo-container">
         <img className="game-logo" src={props.image} />
+        <div className="game-logo-bg"></div>
+        </div>
         <p>{props.title}</p>
       </div>
     );
