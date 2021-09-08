@@ -54,4 +54,7 @@ Prerequisites are **node.js** _(LTS)_ (and **git** if you clone the repo)
 This is the web based setup that only requires a modern browser to get you started.
 
 1. [Open a new Codesandbox](https://codesandbox.io/s/github/AndreasLindbergPAF/paf-frontend-exercise/tree/master/?fontsize=14&hidenavigation=1&theme=dark).
-1. When done, send us your Codesandbox-link.
+2. When done, send us your Codesandbox-link.
+
+### Solution
+https://codesandbox.io/s/y2kc6
